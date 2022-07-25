@@ -1,7 +1,7 @@
 import { EloSystemOptions, Outcome, NewScores, DEFAULT_ELO_SYSTEM_OPTIONS } from './interface';
 
 /**
- * Calculate probability of win/loss; used in `adjustRating`
+ * Calculate expected outcome of a matchup
  */
 const calculateExpectedOutcome = (firstRating: number, secondRating: number): number => {
   return 1 / (
@@ -9,6 +9,9 @@ const calculateExpectedOutcome = (firstRating: number, secondRating: number): nu
   )
 };
 
+/**
+ * Calculate new Elo rating from an outcome
+ */
 const adjustRating = (
   kValue: number,
   previousRating: number,
@@ -21,9 +24,9 @@ const adjustRating = (
  * Get the function to compute new ratings for player A and player B.
  *
  * k value is a hint at the maximum adjustment possible per game. More experienced competitors
- * should use a lower k value sincetheir current ELO is closer to their actual, or true ELO.
+ * should use a lower k value since their current ELO is closer to their actual, or true ELO.
  *
- * if a kValue isn't given, a reasonable default of 32 is used
+ * if a kValue isn't given, a reasonable default of 32 is used (see https://en.wikipedia.org/wiki/Elo_rating_system for other values and why they'd be used)
  */
 export const getEloCalculation = ({ kValue }: EloSystemOptions = DEFAULT_ELO_SYSTEM_OPTIONS) => {
   const k = kValue ?? 32;
