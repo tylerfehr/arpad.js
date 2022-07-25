@@ -7,17 +7,11 @@ Named after its inventor, [Arpad Elo](https://en.wikipedia.org/wiki/Arpad_Elo)
 ## Example Usage
 
 ```typescript
+import { getEloCalculation } from './calculations';
+import { Outcome, NewScores } from './interface';
+
 // use all default options
 const calculateElo = getEloCalculation();
-
-const adjustRatingFromOutcomes = (playerA: number, playerB: number, matchOutcomes: Outcome[]): NewScores => {
-  const initialRatings = { eloA: playerA, eloB: playerB };
-
-  return matchOutcomes.reduce<NewScores>(
-    (acc, curr: Outcome) => calculateElo(acc.eloA, acc.eloB, curr),
-    initialRatings,
-  );
-};
 
 /**
  * Starting Elos of player A and player B
@@ -32,7 +26,7 @@ const numMatchesToPlay = 1000;
 for (let i = 0; i < numMatchesToPlay; i += 1) {
   /**
    * Each player has a 50/50 change to win, since they're starting at the same elo. In
-   * reality, the probability of winning will change after each match corresponding to the Elo
+   * reality, the probability of winning with change after each match corresponding to the Elo
    * gain/loss.
    */
   const singleResult = Math.random() > 0.5 ? Outcome.Win : Outcome.Loss
@@ -40,10 +34,10 @@ for (let i = 0; i < numMatchesToPlay; i += 1) {
   matchOutcomes.push(singleResult);
 }
 
-const aWins = matchOutcomes.reduce((acc, curr) => acc + (curr === Outcome.Win ? 1 : 0), 0);
+const aWins = matchOutcomes.filter((o) => o === Outcome.Win).length;
 const bWins = matchOutcomes.length - aWins;
 
-const { eloA: finalA, eloB: finalB }: NewScores = adjustRatingFromOutcomes(startingA, startingB, matchOutcomes);
+const { eloA: finalA, eloB: finalB } = matchOutcomes.reduce<NewScores>((acc, curr) => calculateElo(acc.eloA, acc.eloB, curr), { eloA: startingA, eloB: startingB });
 
 console.log(
   [
@@ -51,7 +45,6 @@ console.log(
     `Player B won ${bWins} matches moving their Elo from ${startingB} => ${finalB}`,
   ].join('\n')
 )
-
 ```
 
 ## Database Integration

@@ -4,15 +4,6 @@ import { Outcome, NewScores } from './interface';
 // use all default options
 const calculateElo = getEloCalculation();
 
-const adjustRatingFromOutcomes = (playerA: number, playerB: number, matchOutcomes: Outcome[]): NewScores => {
-  const initialRatings = { eloA: playerA, eloB: playerB };
-
-  return matchOutcomes.reduce<NewScores>(
-    (acc, curr: Outcome) => calculateElo(acc.eloA, acc.eloB, curr),
-    initialRatings,
-  );
-};
-
 /**
  * Starting Elos of player A and player B
  */
@@ -34,10 +25,10 @@ for (let i = 0; i < numMatchesToPlay; i += 1) {
   matchOutcomes.push(singleResult);
 }
 
-const aWins = matchOutcomes.reduce((acc, curr) => acc + (curr === Outcome.Win ? 1 : 0), 0);
+const aWins = matchOutcomes.filter((o) => o === Outcome.Win).length;
 const bWins = matchOutcomes.length - aWins;
 
-const { eloA: finalA, eloB: finalB }: NewScores = adjustRatingFromOutcomes(startingA, startingB, matchOutcomes);
+const { eloA: finalA, eloB: finalB } = matchOutcomes.reduce<NewScores>((acc, curr) => calculateElo(acc.eloA, acc.eloB, curr), { eloA: startingA, eloB: startingB });
 
 console.log(
   [
