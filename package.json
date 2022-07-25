@@ -1,0 +1,55 @@
+{
+  "name": "arpad.js",
+  "version": "0.0.0",
+  "description": "An ELO system library",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tylerfehr/arpad.js"
+  },
+  "keywords": [
+    "module"
+  ],
+  "author": "Tyler Fehr <fehrtyler5@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tylerfehr/arpad.js/issues"
+  },
+  "homepage": "https://github.com/tylerfehr/arpad.js/blob/master/README.md",
+  "scripts": {
+    "deps": "yarn install",
+    "build": "yarn run clean && yarn run deps && yarn run check-deps && yarn run raw-build && yarn run coverage",
+    "check-deps": "yarn audit --groups dependencies",
+    "clean": "rm -rf lib",
+    "raw-build": "tsc -p tsconfig.json"
+  },
+  "nyc": {
+    "include": [
+      "src/**/*.ts"
+    ],
+    "exclude": [
+      "**/*.spec.ts"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "reporter": [
+      "json-summary",
+      "text-summary",
+      "html"
+    ],
+    "sourceMap": true,
+    "instrument": true
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "16",
+    "source-map-support": "^0.5.21",
+    "ts-node": "10",
+    "typescript": "4"
+  }
+}
