@@ -1,6 +1,6 @@
 # Arpad.js
 
-An ELO system library written in TypeScript.
+An Elo system library written in TypeScript.
 
 Named after its inventor, [Arpad Elo](https://en.wikipedia.org/wiki/Arpad_Elo)
 
