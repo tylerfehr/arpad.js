@@ -19,7 +19,7 @@
   "homepage": "https://github.com/tylerfehr/arpad.js/blob/master/README.md",
   "scripts": {
     "deps": "yarn install",
-    "build": "yarn run clean && yarn run deps && yarn run check-deps && yarn run raw-build && yarn run coverage",
+    "build": "yarn run clean && yarn run deps && yarn run check-deps && yarn run raw-build",
     "check-deps": "yarn audit --groups dependencies",
     "clean": "rm -rf lib",
     "raw-build": "tsc -p tsconfig.json"
