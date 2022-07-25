@@ -7,4 +7,4 @@ import { EloSystemOptions, Outcome, NewScores } from './interface';
  *
  * if a kValue isn't given, a reasonable default of 32 is used (see https://en.wikipedia.org/wiki/Elo_rating_system for other values and why they'd be used)
  */
-export declare const getEloCalculation: ({ kValue }?: EloSystemOptions) => (ratingA: number, ratingB: number, outcomeA: Outcome) => NewScores;
+export declare const getEloCalculation: (options?: EloSystemOptions) => (ratingA: number, ratingB: number, outcomeA: Outcome) => NewScores;

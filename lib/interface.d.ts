@@ -6,18 +6,10 @@ export declare enum Outcome {
     Win = 1,
     Draw = 0.5
 }
-/**
- * A competitor; can be augmented with an arbitrary data object of input type T
- */
 export interface EloSystemOptions {
-    /**
-     * if this option is set
-     */
-    kValue?: number;
+    kValue: number;
+    areResultsRounded: boolean;
 }
-/**
- * Deflation options
- */
 export interface NewScores {
     eloA: number;
     eloB: number;
@@ -25,6 +17,4 @@ export interface NewScores {
 /**
  * Default options object
  */
-export declare const DEFAULT_ELO_SYSTEM_OPTIONS: {
-    kValue: number;
-};
+export declare const DEFAULT_ELO_SYSTEM_OPTIONS: EloSystemOptions;
