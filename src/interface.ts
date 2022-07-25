@@ -36,7 +36,14 @@ export interface EloSystemOptions {
 //   maxTimeBetweenGames: string;
 // }
 
-export interface Result {
+export interface NewScores {
   eloA: number;
   eloB: number;
+}
+
+/**
+ * Default options object
+ */
+export const DEFAULT_ELO_SYSTEM_OPTIONS = {
+  kValue: 32,
 }

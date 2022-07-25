@@ -1,4 +1,4 @@
-import { EloSystemOptions, Outcome, Result } from './interface';
+import { EloSystemOptions, Outcome, NewScores, DEFAULT_ELO_SYSTEM_OPTIONS } from './interface';
 
 /**
  * Calculate probability of win/loss; used in `adjustRating`
@@ -14,7 +14,7 @@ const adjustRating = (
   previousRating: number,
   expectedOutcome: number,
   actualOutcome: Outcome,
-): number => previousRating + kValue * (expectedOutcome - actualOutcome);
+): number => previousRating + kValue * (actualOutcome - expectedOutcome);
 
 
 /**
@@ -25,19 +25,21 @@ const adjustRating = (
  *
  * if a kValue isn't given, a reasonable default of 32 is used
  */
-export const getEloCalculation = ({ kValue }: EloSystemOptions = { kValue: 32 }) => {
+export const getEloCalculation = ({ kValue }: EloSystemOptions = DEFAULT_ELO_SYSTEM_OPTIONS) => {
   const k = kValue ?? 32;
 
   /**
    * Outcome is with respect to player A, so e.g. Outcome.Win means that player A wins while player B loses
    */
-  return (ratingA: number, ratingB: number, outcome: Outcome): Result => {
+  return (ratingA: number, ratingB: number, outcomeA: Outcome): NewScores => {
     const expectedOutcomeA = calculateExpectedOutcome(ratingB, ratingA);
     const expectedOutcomeB = calculateExpectedOutcome(ratingA, ratingB);
 
+    const outcomeB = outcomeA === Outcome.Win ? Outcome.Loss : Outcome.Win;
+
     return {
-      eloA: adjustRating(k, ratingA, expectedOutcomeA, outcome),
-      eloB: adjustRating(k, ratingB, expectedOutcomeB, outcome)
+      eloA: adjustRating(k, ratingA, expectedOutcomeA, outcomeA),
+      eloB: adjustRating(k, ratingB, expectedOutcomeB, outcomeB)
     };
   };
 }
