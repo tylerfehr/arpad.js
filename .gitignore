@@ -1,2 +1,13 @@
-node_modules
-.vscode
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# Log Files
+*.log
+
+# Dependencies
+**/node_modules
+
+# Cache
+.ts-node
+.out-tsc-spec
