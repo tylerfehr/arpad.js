@@ -3,30 +3,36 @@ import { Outcome, NewScores } from './interface';
 
 const calculateElo = getEloCalculation();
 
-const playNMatches = (n: number): Outcome[] => {
-  const res = [];
+const adjustRatingFromOutcomes = (playerA: number, playerB: number, matchOutcomes: Outcome[]): NewScores => {
+  const initialRatings = { eloA: playerA, eloB: playerB };
 
-  for (let i = 0; i < n; i += 1) {
-    const singleResult = Math.random() > 0.5 ? Outcome.Win : Outcome.Loss
-
-    res.push(singleResult);
-  }
-
-  console.log(res);
-
-  return res;
-}
-
-const adjustRatingFromOutcomes = (playerA: number, playerB: number, outcomes: Outcome[]): NewScores => {
-  return outcomes.reduce<NewScores>(
+  return matchOutcomes.reduce<NewScores>(
     (acc, curr: Outcome) => calculateElo(acc.eloA, acc.eloB, curr),
-    { eloA: playerA, eloB: playerB },
+    initialRatings,
   );
 };
 
 const startingA = 1000;
 const startingB = 1000;
 
-const matchOutcomes = playNMatches(10000);
+const matchOutcomes: Outcome[] = [];
+const numMatchesToPlay = 1000;
 
-console.log(adjustRatingFromOutcomes(startingA, startingB, matchOutcomes));
+for (let i = 0; i < numMatchesToPlay; i += 1) {
+  const singleResult = Math.random() > 0.5 ? Outcome.Win : Outcome.Loss
+
+  matchOutcomes.push(singleResult);
+}
+
+const aWins = matchOutcomes.reduce((acc, curr) => acc + (curr === Outcome.Win ? 1 : 0), 0);
+const bWins = matchOutcomes.length - aWins;
+
+const { eloA: finalA, eloB: finalB } = adjustRatingFromOutcomes(startingA, startingB, matchOutcomes);
+
+console.log(
+  [
+    `Player A won ${aWins} matches moving their Elo ${startingA} => ${finalA}`,
+    `Player B won ${bWins} matches moving their Elo ${startingB} => ${finalB}`,
+  ].join('\n')
+)
+

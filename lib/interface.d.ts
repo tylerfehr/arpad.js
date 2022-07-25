@@ -18,7 +18,13 @@ export interface EloSystemOptions {
 /**
  * Deflation options
  */
-export interface Result {
+export interface NewScores {
     eloA: number;
     eloB: number;
 }
+/**
+ * Default options object
+ */
+export declare const DEFAULT_ELO_SYSTEM_OPTIONS: {
+    kValue: number;
+};
