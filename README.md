@@ -1,10 +1,13 @@
 # Arpad.js
 
-An ELO system library written in TypeScript
+An ELO system library written in TypeScript.
+
+Named after its inventor, [Arpad Elo](https://en.wikipedia.org/wiki/Arpad_Elo)
 
 ## Example Usage
 
 ```typescript
+// use all default options
 const calculateElo = getEloCalculation();
 
 const adjustRatingFromOutcomes = (playerA: number, playerB: number, matchOutcomes: Outcome[]): NewScores => {
@@ -16,13 +19,22 @@ const adjustRatingFromOutcomes = (playerA: number, playerB: number, matchOutcome
   );
 };
 
+/**
+ * Starting Elos of player A and player B
+ */
 const startingA = 1000;
 const startingB = 1000;
 
 const matchOutcomes: Outcome[] = [];
+
 const numMatchesToPlay = 1000;
 
 for (let i = 0; i < numMatchesToPlay; i += 1) {
+  /**
+   * Each player has a 50/50 change to win, since they're starting at the same elo. In
+   * reality, the probability of winning with change after each match corresponding to the Elo
+   * gain/loss.
+   */
   const singleResult = Math.random() > 0.5 ? Outcome.Win : Outcome.Loss
 
   matchOutcomes.push(singleResult);
@@ -31,14 +43,15 @@ for (let i = 0; i < numMatchesToPlay; i += 1) {
 const aWins = matchOutcomes.reduce((acc, curr) => acc + (curr === Outcome.Win ? 1 : 0), 0);
 const bWins = matchOutcomes.length - aWins;
 
-const { eloA: finalA, eloB: finalB } = adjustRatingFromOutcomes(startingA, startingB, matchOutcomes);
+const { eloA: finalA, eloB: finalB }: NewScores = adjustRatingFromOutcomes(startingA, startingB, matchOutcomes);
 
 console.log(
   [
-    `Player A won ${aWins} matches moving their Elo ${startingA} => ${finalA}`,
-    `Player B won ${bWins} matches moving their Elo ${startingB} => ${finalB}`,
+    `Player A won ${aWins} matches moving their Elo from ${startingA} => ${finalA}`,
+    `Player B won ${bWins} matches moving their Elo from ${startingB} => ${finalB}`,
   ].join('\n')
 )
+
 ```
 
 ## Database Integration

@@ -28,21 +28,33 @@ const adjustRating = (
  *
  * if a kValue isn't given, a reasonable default of 32 is used (see https://en.wikipedia.org/wiki/Elo_rating_system for other values and why they'd be used)
  */
-export const getEloCalculation = ({ kValue }: EloSystemOptions = DEFAULT_ELO_SYSTEM_OPTIONS) => {
-  const k = kValue ?? 32;
+export const getEloCalculation = (options: EloSystemOptions = DEFAULT_ELO_SYSTEM_OPTIONS) => {
+  const opts = {
+    ...DEFAULT_ELO_SYSTEM_OPTIONS,
+    ...options,
+  };
+
+  const { kValue, areResultsRounded } = opts;
 
   /**
    * Outcome is with respect to player A, so e.g. Outcome.Win means that player A wins while player B loses
    */
   return (ratingA: number, ratingB: number, outcomeA: Outcome): NewScores => {
+    const outcomeB = outcomeA === Outcome.Win ? Outcome.Loss : Outcome.Win;
+
     const expectedOutcomeA = calculateExpectedOutcome(ratingB, ratingA);
     const expectedOutcomeB = calculateExpectedOutcome(ratingA, ratingB);
 
-    const outcomeB = outcomeA === Outcome.Win ? Outcome.Loss : Outcome.Win;
+    if (areResultsRounded) {
+      return {
+        eloA: Math.round(adjustRating(kValue, ratingA, expectedOutcomeA, outcomeA)),
+        eloB: Math.round(adjustRating(kValue, ratingB, expectedOutcomeB, outcomeB)),
+      };
+    }
 
     return {
-      eloA: adjustRating(k, ratingA, expectedOutcomeA, outcomeA),
-      eloB: adjustRating(k, ratingB, expectedOutcomeB, outcomeB)
+      eloA: adjustRating(kValue, ratingA, expectedOutcomeA, outcomeA),
+      eloB: adjustRating(kValue, ratingB, expectedOutcomeB, outcomeB)
     };
   };
 }
