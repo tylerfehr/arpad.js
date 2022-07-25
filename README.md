@@ -32,7 +32,7 @@ const numMatchesToPlay = 1000;
 for (let i = 0; i < numMatchesToPlay; i += 1) {
   /**
    * Each player has a 50/50 change to win, since they're starting at the same elo. In
-   * reality, the probability of winning with change after each match corresponding to the Elo
+   * reality, the probability of winning will change after each match corresponding to the Elo
    * gain/loss.
    */
   const singleResult = Math.random() > 0.5 ? Outcome.Win : Outcome.Loss
